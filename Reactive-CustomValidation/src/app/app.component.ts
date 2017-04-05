@@ -11,7 +11,7 @@ export class AppComponent {
 
   heroForm: FormGroup;
 
-  forAlter = Validators.compose([Validators.required, Validators.maxLength(10), this.startsWithNumber]);
+  forAlter = Validators.compose([Validators.required, Validators.maxLength(10), this.startsWithLetter]);
 
   submitted = false;
   active = true;
@@ -61,46 +61,52 @@ addHero() {
 
 onValueChanged(data?: any) 
 {
-    for (const field in this.formErrors) 
-    {
+    for (const field in this.formErrors)  // getting the objects inside the formErrors
+    {                                     // looping them all
       // clear previous error message (if any)
-      this.formErrors[field] = '';
-      const control = this.heroForm.get(field);
+      this.formErrors[field] = '';        // making them null while there's no error passed yet
 
-      if (control && control.dirty && !control.valid) {
+      const control = this.heroForm.get(field); // control holds if who's field is used
+
+      if (control && control.dirty && !control.valid) 
+       {
         const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + '\n';
+        
+        for (const key in control.errors) 
+        {
+          this.formErrors[field] += messages[key];
         } 
+
       }
 
     }
-  }
 
-     mailFormat(control: FormControl): ValidationResult 
+  } 
+
+  mailFormat(control: FormControl): ValidationResult 
      {
-        var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-
+        var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]+.[a-z0-9]+$/;
+      
         if (control.value != "" && (control.value.length <= 5 || !EMAIL_REGEXP.test(control.value))) {
-            return { "incorrectMailFormat": true };
+            return { "incorrectMailFormat": true }; // the one that is triggered on our validationMessages
         }
 
-        return null;
+        return null;  //returns no message error when no conflicts fired
     }
 
 
-    startsWithNumber(control: FormControl): ValidationResult 
+    startsWithLetter(control: FormControl): ValidationResult 
     { 
     
-      if ( control.value !="" && !isNaN(control.value.charAt(0)) )
+      if ( control.value !="" && !isNaN(control.value.charAt(0) ))
       {
-        return {"startsWithNumber": true};
+        return {"startsWithLetter": true}; // also the one triggered on the validationMessages
       }
     
       return null;
     }
 
-  formErrors = {
+  formErrors = {         // the object for the errors
     'name': '',
     'power': '',
     'numberOnly': '',
@@ -127,7 +133,7 @@ onValueChanged(data?: any)
     {
       'required':'AlterEgo is required.',
       'maxlength': 'AlterEgo only accepts a maximum of 10 characters.',
-      'startsWithNumber': 'This must not start with number'
+      'startsWithLetter': 'This must not start with number'
     },
     'email': 
     {

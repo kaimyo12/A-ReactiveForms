@@ -24,6 +24,7 @@
         <div class="form-group">
         <label for="alterEgo">Email</label>
         <input type="text" id="email" class="form-control" required formControlName="email"  >
+        
       <div *ngIf="formErrors.email" class="alert alert-danger">
            <span class="errors">{{ formErrors.email }}</span>
         </div>
