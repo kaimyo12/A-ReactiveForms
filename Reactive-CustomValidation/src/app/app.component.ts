@@ -17,7 +17,7 @@ export class AppComponent {
   submitted = false;
   active = true;
   powers = ['Really Smart', 'Super Flexible', 'Weather Changer'];
-  hero = new Hero(18, 'Dr. WhatIsHisName', this.powers[0], 10, 'Dr. What');
+  hero = new Hero(18, 'Dr. What', this.powers[0], 10, 'Dr. WhatDa');
 
   constructor(private fb: FormBuilder) { }
 
@@ -31,7 +31,7 @@ export class AppComponent {
     this.heroForm = this.fb.group({
       'name': [this.hero.name, [
           Validators.required,
-          Validators.minLength(4),
+          CustomValidators.rangeLength([4,10])
         ]
       ],
       'numberOnly':[this.hero.numberOnly,[
@@ -42,7 +42,7 @@ export class AppComponent {
       ]],
       'alterEgo': [this.hero.alterEgo, this.forAlter],
       'power':    [this.hero.power, Validators.required],
-      'email': ['', [Validators.required, this.mailFormat, CustomValidators.rangeLength([4,10])]]
+      'email': ['', [Validators.required, this.mailFormat]]
     });
 
     this.heroForm.valueChanges
@@ -86,7 +86,7 @@ onValueChanged(data?: any)
 
   mailFormat(control: FormControl): ValidationResult 
      {
-        var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]+.[a-z0-9]+$/;
+        var EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       
         if (control.value != "" && (control.value.length <= 5 || !EMAIL_REGEXP.test(control.value))) {
             return { "incorrectMailFormat": true }; // the one that is triggered on our validationMessages
@@ -118,7 +118,7 @@ onValueChanged(data?: any)
   validationMessages = {
     'name': {
       'required':      'Name is required.',
-      'minlength':     'Name must be at least 4 characters long.',
+      'rangeLength': 'Character range is 4 to 10.'
     },
     'numberOnly':
     {
@@ -140,7 +140,6 @@ onValueChanged(data?: any)
     {
       'required': 'Email is required',
       'incorrectMailFormat': 'Email not met, Example: kaimyo12@yahoo.com/kaimyo24@gmail.com.',
-      'rangeLength': 'Character range is 4 to 10.'
     }
   };
 }
