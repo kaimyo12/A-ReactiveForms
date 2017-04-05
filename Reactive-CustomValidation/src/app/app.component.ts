@@ -45,7 +45,7 @@ export class AppComponent {
     });
 
     this.heroForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(data => this.onValueChanged());
     this.onValueChanged(); // (re)set validation messages now
   }
 
@@ -60,20 +60,20 @@ addHero()
   this.buildForm();
 }
 
-onValueChanged(data?: any) 
+onValueChanged() 
 {
-    for (const field in this.formErrors)  // getting the objects inside the formErrors
+    for (let field in this.formErrors)  // getting the objects inside the formErrors
     {                                     // looping them all
       // clear previous error message (if any)
       this.formErrors[field] = '';        // making them null while there's no error passed yet
 
-      const control = this.heroForm.get(field); // control holds if who's field is used
+      let control = this.heroForm.get(field); // control holds if who's field is used
 
       if (control && control.dirty && !control.valid) 
        {
-        const messages = this.validationMessages[field];
+        let messages = this.validationMessages[field];
         
-        for (const key in control.errors) 
+        for (let key in control.errors) 
         {
           this.formErrors[field] += messages[key];
         } 
