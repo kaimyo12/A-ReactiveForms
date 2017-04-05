@@ -1,0 +1,50 @@
+<div class="container">
+  <div [hidden]="submitted">
+    <h1>Hero Form (Reactive Style)</h1>
+    <form [formGroup]="heroForm"  *ngIf="active"  (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        
+        <input type="text" id="name" class="form-control"
+               formControlName="name" required >
+
+        <div *ngIf="formErrors.name" class="alert alert-danger">
+         <span class="errors"> {{ formErrors.name }} </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="alterEgo">Alter Ego</label>
+        <input type="text" id="alterEgo" class="form-control" required formControlName="alterEgo"  >
+      <div *ngIf="formErrors.alterEgo" class="alert alert-danger">
+           <span class="errors">{{ formErrors.alterEgo }}</span>
+        </div>
+      </div>
+
+        <div class="form-group">
+        <label for="name">Number</label>
+        
+        <input type="text" id="numberOnly" class="form-control" formControlName="numberOnly" required >
+
+        <div *ngIf="formErrors.numberOnly" class="alert alert-danger">
+           <span class="errors">{{ formErrors.numberOnly }}</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="power">Hero Power</label>
+        <select id="power" class="form-control"
+            formControlName="power" required >
+          <option *ngFor="let p of powers" [value]="p">{{p}}</option>
+        </select>
+
+        <div *ngIf="formErrors.power" class="alert alert-danger">
+           <span class="errors">{{ formErrors.power }}</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-default" [disabled]="!heroForm.valid">Submit</button>
+      <button type="button" class="btn btn-default" (click)="addHero()">New Hero</button>
+    </form>
+  </div>
+</div>
