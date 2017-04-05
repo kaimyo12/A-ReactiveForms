@@ -1,6 +1,7 @@
 import { Component, OnInit, Directive } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Hero } from './hero';
+import { CustomValidators } from 'ng2-validation';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,7 @@ export class AppComponent {
       ]],
       'alterEgo': [this.hero.alterEgo, this.forAlter],
       'power':    [this.hero.power, Validators.required],
-      'email': ['', [Validators.required, this.mailFormat]]
+      'email': ['', [Validators.required, this.mailFormat, CustomValidators.rangeLength([4,10])]]
     });
 
     this.heroForm.valueChanges
@@ -138,7 +139,8 @@ onValueChanged(data?: any)
     'email': 
     {
       'required': 'Email is required',
-      'incorrectMailFormat': 'Email not met, Example: kaimyo12@yahoo.com/kaimyo24@gmail.com'
+      'incorrectMailFormat': 'Email not met, Example: kaimyo12@yahoo.com/kaimyo24@gmail.com.',
+      'rangeLength': 'Character range is 4 to 10.'
     }
   };
 }
