@@ -25,9 +25,8 @@ export class AppComponent {
     this.buildForm();
   }
 
-  
-
-  buildForm(): void {
+  buildForm(): void 
+  {
     this.heroForm = this.fb.group({
       'name': [this.hero.name, [
           Validators.required,
@@ -55,7 +54,8 @@ export class AppComponent {
   this.hero = this.heroForm.value;
 }
 
-addHero() {
+addHero() 
+{
   this.hero = new Hero(42, '', '', null , '');
   this.buildForm();
 }
