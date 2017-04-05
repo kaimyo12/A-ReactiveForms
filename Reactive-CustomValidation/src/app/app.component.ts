@@ -17,6 +17,7 @@ export class AppComponent {
   active = true;
   powers = ['Really Smart', 'Super Flexible', 'Weather Changer'];
   hero = new Hero(18, 'Dr. WhatIsHisName', this.powers[0], 10, 'Dr. What');
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -39,7 +40,8 @@ export class AppComponent {
         Validators.pattern('[0-9]+')
       ]],
       'alterEgo': [this.hero.alterEgo, this.forAlter],
-      'power':    [this.hero.power, Validators.required]
+      'power':    [this.hero.power, Validators.required],
+      'email': ['', [Validators.required, this.mailFormat]]
     });
 
     this.heroForm.valueChanges
@@ -57,23 +59,41 @@ addHero() {
   this.buildForm();
 }
 
-onValueChanged(data?: any) {
-    for (const field in this.formErrors) {
+onValueChanged(data?: any) 
+{
+    for (const field in this.formErrors) 
+    {
       // clear previous error message (if any)
       this.formErrors[field] = '';
       const control = this.heroForm.get(field);
+
       if (control && control.dirty && !control.valid) {
         const messages = this.validationMessages[field];
         for (const key in control.errors) {
           this.formErrors[field] += messages[key] + '\n';
-        }
+        } 
       }
+
     }
   }
 
-    startsWithNumber(control: FormControl): ValidationResult { 
+     mailFormat(control: FormControl): ValidationResult 
+     {
+        var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+
+        if (control.value != "" && (control.value.length <= 5 || !EMAIL_REGEXP.test(control.value))) {
+            return { "incorrectMailFormat": true };
+        }
+
+        return null;
+    }
+
+
+    startsWithNumber(control: FormControl): ValidationResult 
+    { 
     
-      if ( control.value !="" && !isNaN(control.value.charAt(0)) ){
+      if ( control.value !="" && !isNaN(control.value.charAt(0)) )
+      {
         return {"startsWithNumber": true};
       }
     
@@ -84,7 +104,8 @@ onValueChanged(data?: any) {
     'name': '',
     'power': '',
     'numberOnly': '',
-    'alterEgo': ''
+    'alterEgo': '',
+    'email': ''
   };
 
   validationMessages = {
@@ -106,9 +127,16 @@ onValueChanged(data?: any) {
     {
       'required':'AlterEgo is required.',
       'maxlength': 'AlterEgo only accepts a maximum of 10 characters.',
+      'startsWithNumber': 'This must not start with number'
+    },
+    'email': 
+    {
+      'required': 'Email is required',
+      'incorrectMailFormat': 'Email not met, Example: kaimyo12@yahoo.com/kaimyo24@gmail.com'
     }
   };
 }
+
 
 interface ValidationResult{
    [key:string]:boolean;
